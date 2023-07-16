@@ -1,56 +1,94 @@
-import { Component } from 'react';
-import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+import React, { Component } from 'react';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import { getImg } from '../../services/getimg';
-import Button from 'components/Button/Button';
+import Button from '../Button/Button';
+import Loader from '../Loader/Loader';
+import Modal from '../Modal/Modal';
 
 class ImageGallery extends Component {
   state = {
-    img: null,
+    images: [],
     page: 1,
+    isLoading: false,
+    selectedImage: null,
   };
 
-  componentDidUpdate = async (prevProps, prevState) => {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchImg !== this.props.searchImg) {
-      try {
-        const imgData = await getImg(this.props.searchImg, this.state.page);
-        this.setState({ img: imgData });
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      this.fetchImages();
+    }
+  }
+
+  fetchImages = async () => {
+    try {
+      this.setState({ isLoading: true });
+      const { searchImg } = this.props;
+      const { page } = this.state;
+      const imagesData = await getImg(searchImg, page);
+      this.setState({ images: imagesData });
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 
   loadMoreImages = async () => {
     try {
+      this.setState({ isLoading: true });
+      const { searchImg } = this.props;
       const nextPage = this.state.page + 1;
-      const imgData = await getImg(this.props.searchImg, nextPage);
+      const imagesData = await getImg(searchImg, nextPage);
       this.setState(prevState => ({
-        img: [...prevState.img, ...imgData],
+        images: [...prevState.images, ...imagesData],
         page: nextPage,
       }));
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 
+  openModal = selectedImage => {
+    this.setState({ selectedImage });
+  };
+
+  closeModal = () => {
+    this.setState({ selectedImage: null });
+  };
+
   render() {
-    const { img } = this.state;
-    const showButton = img && img.length > 0;
+    const { images, isLoading, selectedImage } = this.state;
 
     return (
       <div>
         <ul className="gallery">
-          {img &&
-            img.map(img => (
-              <ImageGalleryItem
-                key={img.id}
-                src={img.webformatURL}
-                alt={img.id}
-                largeImageURL={img.largeImageURL}
-              />
-            ))}
+          {images.map(image => (
+            <ImageGalleryItem
+              key={image.id}
+              src={image.webformatURL}
+              alt={image.tags}
+              onClick={() => this.openModal(image)}
+            />
+          ))}
         </ul>
-        <Button showButton={showButton} onClick={this.loadMoreImages} />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Button
+            showButton={images.length > 0}
+            onClick={this.loadMoreImages}
+          />
+        )}
+
+        {selectedImage && (
+          <Modal
+            imageUrl={selectedImage.largeImageURL}
+            altText={selectedImage.tags}
+            onClose={this.closeModal}
+          />
+        )}
       </div>
     );
   }

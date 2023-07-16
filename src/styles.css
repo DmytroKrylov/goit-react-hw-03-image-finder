@@ -71,7 +71,7 @@ img {
   overflow: hidden;
 }
 
-/* .SearchForm-button {
+.SearchForm-button {
   display: inline-block;
   width: 48px;
   height: 48px;
@@ -88,7 +88,7 @@ img {
 
 .SearchForm-button:hover {
   opacity: 1;
-} */
+}
 
 .SearchForm-button-label {
   position: absolute;
@@ -159,7 +159,7 @@ img {
  * Стили компонента Modal
  */
 
-.Overlay {
+/* .Overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -175,7 +175,7 @@ img {
 .Modal {
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
-}
+} */
 
 /*
 * Стили компонента Buton (Load more)
