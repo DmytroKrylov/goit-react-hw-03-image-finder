@@ -4,6 +4,7 @@ import { getImg } from '../../services/getimg';
 import Button from '../Button/Button';
 import Loader from '../Loader/Loader';
 import Modal from '../Modal/Modal';
+import styles from './ImageGallery.module.css';
 
 class ImageGallery extends Component {
   state = {
@@ -62,8 +63,8 @@ class ImageGallery extends Component {
     const { images, isLoading, selectedImage } = this.state;
 
     return (
-      <div>
-        <ul className="gallery">
+      <div className={styles.imageGallery_top}>
+        <ul className={styles.imageGallery}>
           {images.map(image => (
             <ImageGalleryItem
               key={image.id}

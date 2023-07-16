@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import css from './Modal.module.css';
+import styles from './Modal.module.css';
 
 class Modal extends Component {
   componentDidMount() {
@@ -26,8 +26,8 @@ class Modal extends Component {
     const { imageUrl, altText } = this.props;
 
     return (
-      <div className={css.overlay} onClick={this.handleOverlayClick}>
-        <div className={css.modal}>
+      <div className={styles.overlay} onClick={this.handleOverlayClick}>
+        <div className={styles.modal}>
           <img src={imageUrl} alt={altText} />
         </div>
       </div>
