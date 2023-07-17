@@ -1,12 +1,22 @@
-import React from 'react';
-import { Oval } from 'react-loader-spinner';
+import { RotatingLines } from 'react-loader-spinner';
 
-const Loader = () => {
+export function Loader() {
   return (
-    <div className="loader">
-      <Oval type="Oval" color="#00BFFF" height={80} width={80} />
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <RotatingLines
+        strokeColor="grey"
+        strokeWidth="5"
+        animationDuration="0.75"
+        width="96"
+        visible={true}
+      />
     </div>
   );
-};
-
-export default Loader;
+}
